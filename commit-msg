@@ -1,0 +1,21 @@
+#!/bin/env bash
+#
+# An example hook script to check the commit log message.
+# Called by "git commit" with one argument, the name of the file
+# that has the commit message.  The hook should exit with non-zero
+# status after issuing an appropriate message if it wants to stop the
+# commit.  The hook is allowed to edit the commit message file.
+#
+# To enable this hook, rename this file to "commit-msg".
+
+commit_editmsg_file=$1
+head_line=`head -n1 $commit_editmsg_file`
+branch=$(git branch --show-current | cut -d "/" -f 2)
+if [[ "$head_line" != "$branch:"* ]];
+then
+ echo "-- commit-msg hook: --"
+ echo "The name of the current branch must be included in your commit!"
+ exit 1
+fi
+
+
